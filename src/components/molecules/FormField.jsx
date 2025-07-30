@@ -1,35 +1,24 @@
-import Label from "@/components/atoms/Label";
-import Input from "@/components/atoms/Input";
-import TextArea from "@/components/atoms/TextArea";
+import React from "react";
 import { cn } from "@/utils/cn";
 
 const FormField = ({ 
   label, 
-  type = "text", 
-  multiline = false, 
+  children, 
   error, 
-  className,
-  ...props 
+  required = false, 
+  className 
 }) => {
-  const InputComponent = multiline ? TextArea : Input;
-
   return (
-    <div className={cn("space-y-1", className)}>
+    <div className={cn("space-y-2", className)}>
       {label && (
-        <Label htmlFor={props.id || props.name}>
+        <label className="block text-sm font-medium text-gray-700">
           {label}
-        </Label>
+          {required && <span className="text-red-500 ml-1">*</span>}
+        </label>
       )}
-      <InputComponent
-        type={type}
-        {...props}
-        className={cn(
-          error && "border-error focus:border-error focus:ring-error/20",
-          props.className
-        )}
-      />
+      {children}
       {error && (
-        <p className="text-sm text-error font-medium">{error}</p>
+        <p className="text-sm text-red-600">{error}</p>
       )}
     </div>
   );

@@ -1,45 +1,24 @@
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
+import Sidebar from "@/components/organisms/Sidebar";
 import Header from "@/components/organisms/Header";
-import BottomNavigation from "@/components/organisms/BottomNavigation";
-import { useLocation } from "react-router-dom";
 
-const Layout = ({ children }) => {
-  const location = useLocation();
-  
-  const getHeaderTitle = () => {
-    switch (location.pathname) {
-      case "/":
-        return "PixelFeed";
-      case "/search":
-        return "Search";
-      case "/create":
-        return "Create Post";
-      case "/profile":
-        return "Profile";
-      default:
-        return "PixelFeed";
-    }
-  };
-
-  const showBackButton = () => {
-    return location.pathname.startsWith("/post/") || 
-           location.pathname.startsWith("/profile/");
-  };
+const Layout = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header 
-        title={getHeaderTitle()}
-        showBack={showBackButton()}
-        showActions={location.pathname === "/"}
-      />
+    <div className="flex h-screen bg-gray-50">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
-      <main className="max-w-md mx-auto pb-20 px-4">
-        <div className="pt-4">
-          {children}
-        </div>
-      </main>
-      
-      <BottomNavigation />
+      <div className="flex-1 flex flex-col lg:ml-64">
+        <Header onMobileMenuToggle={() => setSidebarOpen(true)} />
+        
+        <main className="flex-1 overflow-auto p-6">
+          <div className="max-w-7xl mx-auto">
+            <Outlet />
+          </div>
+        </main>
+      </div>
     </div>
   );
 };

@@ -6,39 +6,31 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: '#E1306C',
-        secondary: '#833AB4',
-        accent: '#F77737',
-        surface: '#FFFFFF',
-        background: '#FAFAFA',
-        success: '#4CAF50',
-        warning: '#FCAF45',
-        error: '#ED4956',
-        info: '#5B51D8',
-      },
       fontFamily: {
-        display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-        body: ['Inter', 'system-ui', 'sans-serif'],
+        'display': ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        'body': ['Inter', 'system-ui', 'sans-serif'],
       },
-      animation: {
-        'heart-pop': 'heartPop 0.3s ease-out',
-        'gradient-shift': 'gradientShift 3s ease-in-out infinite',
-        'shimmer': 'shimmer 2s ease-in-out infinite',
-      },
-      keyframes: {
-        heartPop: {
-          '0%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(1.2)' },
-          '100%': { transform: 'scale(1)' },
+      colors: {
+        primary: {
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          500: '#4F46E5',
+          600: '#4338ca',
+          700: '#3730a3',
         },
-        gradientShift: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
+        secondary: {
+          50: '#faf5ff',
+          100: '#f3e8ff',
+          500: '#7C3AED',
+          600: '#7c2d92',
+          700: '#6b21a8',
         },
-        shimmer: {
-          '0%': { backgroundPosition: '-468px 0' },
-          '100%': { backgroundPosition: '468px 0' },
+        accent: {
+          50: '#ecfeff',
+          100: '#cffafe',
+          500: '#06B6D4',
+          600: '#0891b2',
+          700: '#0e7490',
         },
       },
     },

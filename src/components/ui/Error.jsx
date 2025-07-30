@@ -1,29 +1,34 @@
-import ApperIcon from "@/components/ApperIcon";
+import React from "react";
 import Button from "@/components/atoms/Button";
+import ApperIcon from "@/components/ApperIcon";
+import { cn } from "@/utils/cn";
 
-const Error = ({ message = "Something went wrong", onRetry }) => {
+const Error = ({ 
+  message = "Something went wrong. Please try again.", 
+  onRetry,
+  className 
+}) => {
   return (
-    <div className="flex flex-col items-center justify-center py-12 px-4">
-      <div className="w-16 h-16 bg-gradient-to-br from-error to-red-600 rounded-full flex items-center justify-center mb-4">
-        <ApperIcon name="AlertCircle" className="w-8 h-8 text-white" />
+    <div className={cn("flex flex-col items-center justify-center py-12 px-6 text-center", className)}>
+      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center mb-6 shadow-lg">
+        <ApperIcon name="AlertTriangle" size={32} className="text-red-600" />
       </div>
       
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+      <h3 className="text-xl font-semibold font-display text-gray-900 mb-2">
         Oops! Something went wrong
       </h3>
       
-      <p className="text-gray-600 text-center mb-6 max-w-sm">
-        {message}. Please try again or check your connection.
+      <p className="text-gray-600 mb-6 max-w-md">
+        {message}
       </p>
       
       {onRetry && (
         <Button 
           onClick={onRetry}
-          variant="gradient"
-          className="flex items-center gap-2"
+          className="flex items-center space-x-2"
         >
-          <ApperIcon name="RefreshCw" className="w-4 h-4" />
-          Try Again
+          <ApperIcon name="RefreshCw" size={16} />
+          <span>Try Again</span>
         </Button>
       )}
     </div>

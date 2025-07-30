@@ -1,39 +1,37 @@
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Layout from "@/components/organisms/Layout";
-import Home from "@/components/pages/Home";
-import Search from "@/components/pages/Search";
-import CreatePost from "@/components/pages/CreatePost";
-import Profile from "@/components/pages/Profile";
-import PostDetail from "@/components/pages/PostDetail";
+import Dashboard from "@/components/pages/Dashboard";
+import Jobs from "@/components/pages/Jobs";
+import Candidates from "@/components/pages/Candidates";
+import Clients from "@/components/pages/Clients";
 
 function App() {
   return (
-    <div className="min-h-screen bg-background">
-      <Layout>
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-50">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/create" element={<CreatePost />} />
-          <Route path="/profile/:username" element={<Profile />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/post/:id" element={<PostDetail />} />
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="jobs" element={<Jobs />} />
+<Route path="candidates" element={<Candidates />} />
+            <Route path="clients" element={<Clients />} />
+          </Route>
         </Routes>
-      </Layout>
-      
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          style={{ zIndex: 9999 }}
+        />
+      </div>
+    </BrowserRouter>
   );
 }
 
