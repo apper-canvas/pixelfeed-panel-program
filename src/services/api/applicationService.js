@@ -1,238 +1,582 @@
-import applicationsData from "@/services/mockData/applications.json";
+// Initialize ApperClient with Project ID and Public Key
+const { ApperClient } = window.ApperSDK;
+const apperClient = new ApperClient({
+  apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+  apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+});
 
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-const applications = [...applicationsData];
-let nextId = Math.max(...applications.map(app => app.Id), 0) + 1;
+const tableName = 'application_c';
 
 export const applicationService = {
   async getAll() {
-    await delay(300);
-    return [...applications];
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "Tags" } },
+          { field: { Name: "Owner" } },
+          { field: { Name: "CreatedOn" } },
+          { field: { Name: "CreatedBy" } },
+          { field: { Name: "ModifiedOn" } },
+          { field: { Name: "ModifiedBy" } },
+          { field: { Name: "appliedAt_c" } },
+          { field: { Name: "status_c" } },
+          { field: { Name: "notes_c" } },
+          { field: { Name: "interview_c" } },
+          { field: { Name: "jobId_c" } },
+          { field: { Name: "candidateId_c" } }
+        ],
+        orderBy: [
+          { fieldName: "CreatedOn", sorttype: "DESC" }
+        ]
+      };
+
+      const response = await apperClient.fetchRecords(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching applications:", error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error("Error fetching applications:", error.message);
+        throw new Error(error.message);
+      }
+    }
   },
 
   async getById(id) {
-    await delay(200);
-    if (typeof id !== 'number') {
-      throw new Error('Application ID must be a number');
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "Tags" } },
+          { field: { Name: "Owner" } },
+          { field: { Name: "CreatedOn" } },
+          { field: { Name: "CreatedBy" } },
+          { field: { Name: "ModifiedOn" } },
+          { field: { Name: "ModifiedBy" } },
+          { field: { Name: "appliedAt_c" } },
+          { field: { Name: "status_c" } },
+          { field: { Name: "notes_c" } },
+          { field: { Name: "interview_c" } },
+          { field: { Name: "jobId_c" } },
+          { field: { Name: "candidateId_c" } }
+        ]
+      };
+
+      const response = await apperClient.getRecordById(tableName, parseInt(id), params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      return response.data;
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error(`Error fetching application with ID ${id}:`, error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error(`Error fetching application with ID ${id}:`, error.message);
+        throw new Error(error.message);
+      }
     }
-    
-    const application = applications.find(app => app.Id === id);
-    if (!application) {
-      throw new Error('Application not found');
-    }
-    
-    return { ...application };
   },
 
   async getByJobId(jobId) {
-    await delay(200);
-    if (typeof jobId !== 'number') {
-      throw new Error('Job ID must be a number');
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "Tags" } },
+          { field: { Name: "Owner" } },
+          { field: { Name: "CreatedOn" } },
+          { field: { Name: "CreatedBy" } },
+          { field: { Name: "ModifiedOn" } },
+          { field: { Name: "ModifiedBy" } },
+          { field: { Name: "appliedAt_c" } },
+          { field: { Name: "status_c" } },
+          { field: { Name: "notes_c" } },
+          { field: { Name: "interview_c" } },
+          { field: { Name: "jobId_c" } },
+          { field: { Name: "candidateId_c" } }
+        ],
+        where: [
+          {
+            FieldName: "jobId_c",
+            Operator: "EqualTo",
+            Values: [parseInt(jobId)]
+          }
+        ]
+      };
+
+      const response = await apperClient.fetchRecords(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching applications by job ID:", error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error("Error fetching applications by job ID:", error.message);
+        throw new Error(error.message);
+      }
     }
-    
-    return applications
-      .filter(app => app.jobId === jobId)
-      .map(app => ({ ...app }));
   },
 
   async getByCandidateId(candidateId) {
-    await delay(200);
-    if (typeof candidateId !== 'number') {
-      throw new Error('Candidate ID must be a number');
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Name" } },
+          { field: { Name: "Tags" } },
+          { field: { Name: "Owner" } },
+          { field: { Name: "CreatedOn" } },
+          { field: { Name: "CreatedBy" } },
+          { field: { Name: "ModifiedOn" } },
+          { field: { Name: "ModifiedBy" } },
+          { field: { Name: "appliedAt_c" } },
+          { field: { Name: "status_c" } },
+          { field: { Name: "notes_c" } },
+          { field: { Name: "interview_c" } },
+          { field: { Name: "jobId_c" } },
+          { field: { Name: "candidateId_c" } }
+        ],
+        where: [
+          {
+            FieldName: "candidateId_c",
+            Operator: "EqualTo",
+            Values: [parseInt(candidateId)]
+          }
+        ]
+      };
+
+      const response = await apperClient.fetchRecords(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      return response.data || [];
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error fetching applications by candidate ID:", error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error("Error fetching applications by candidate ID:", error.message);
+        throw new Error(error.message);
+      }
     }
-    
-    return applications
-      .filter(app => app.candidateId === candidateId)
-      .map(app => ({ ...app }));
   },
 
   async create(applicationData) {
-    await delay(500);
-    
-    // Validate required fields
-    if (!applicationData.jobId || !applicationData.candidateId) {
-      throw new Error('Job ID and Candidate ID are required');
+    try {
+      // Check if application already exists
+      const existingAppsResponse = await apperClient.fetchRecords(tableName, {
+        fields: [{ field: { Name: "Id" } }],
+        where: [
+          {
+            FieldName: "jobId_c",
+            Operator: "EqualTo",
+            Values: [parseInt(applicationData.jobId || applicationData.jobId_c)]
+          },
+          {
+            FieldName: "candidateId_c", 
+            Operator: "EqualTo",
+            Values: [parseInt(applicationData.candidateId || applicationData.candidateId_c)]
+          }
+        ]
+      });
+
+      if (existingAppsResponse.success && existingAppsResponse.data && existingAppsResponse.data.length > 0) {
+        throw new Error('Candidate has already been applied to this job');
+      }
+
+      // Only include Updateable fields
+      const updateableData = {
+        Name: `Application - ${Date.now()}`,
+        Tags: applicationData.tags || applicationData.Tags || "",
+        appliedAt_c: applicationData.appliedAt || applicationData.appliedAt_c || new Date().toISOString(),
+        status_c: applicationData.status || applicationData.status_c || "applied",
+        notes_c: applicationData.notes || applicationData.notes_c || "",
+        interview_c: applicationData.interview || applicationData.interview_c || "",
+        jobId_c: parseInt(applicationData.jobId || applicationData.jobId_c),
+        candidateId_c: parseInt(applicationData.candidateId || applicationData.candidateId_c)
+      };
+
+      const params = {
+        records: [updateableData]
+      };
+
+      const response = await apperClient.createRecord(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successfulRecords = response.results.filter(result => result.success);
+        const failedRecords = response.results.filter(result => !result.success);
+        
+        if (failedRecords.length > 0) {
+          console.error(`Failed to create applications ${failedRecords.length} records:${JSON.stringify(failedRecords)}`);
+          throw new Error(failedRecords[0].message || "Failed to create application");
+        }
+        
+        return successfulRecords[0].data;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error creating application:", error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error("Error creating application:", error.message);
+        throw new Error(error.message);
+      }
     }
-
-    // Check if application already exists
-    const existingApp = applications.find(
-      app => app.jobId === applicationData.jobId && app.candidateId === applicationData.candidateId
-    );
-    
-    if (existingApp) {
-      throw new Error('Candidate has already been applied to this job');
-    }
-
-const newApplication = {
-      Id: nextId++,
-      jobId: applicationData.jobId,
-      candidateId: applicationData.candidateId,
-      appliedAt: new Date().toISOString(),
-status: 'applied',
-      notes: applicationData.notes || '',
-      notesCount: 0
-    };
-
-    applications.push(newApplication);
-    return { ...newApplication };
   },
 
-  // Update application status
-async updateStatus(applicationId, newStatus) {
-    await delay(300);
-    
-    // Validate application ID
-    if (!applicationId || typeof applicationId !== 'number') {
-      throw new Error('Invalid application ID');
-    }
-    
-    const validStatuses = ['applied', 'screening', 'interview_scheduled', 'final_review', 'hired', 'rejected'];
-    if (!validStatuses.includes(newStatus)) {
-      throw new Error(`Invalid status: ${newStatus}. Valid statuses are: ${validStatuses.join(', ')}`);
-    }
+  async updateStatus(applicationId, newStatus) {
+    try {
+      const validStatuses = ['applied', 'screening', 'interview_scheduled', 'final_review', 'hired', 'rejected'];
+      if (!validStatuses.includes(newStatus)) {
+        throw new Error(`Invalid status: ${newStatus}. Valid statuses are: ${validStatuses.join(', ')}`);
+      }
 
-    const applicationIndex = applications.findIndex(app => app.Id === applicationId);
-    if (applicationIndex === -1) {
-      throw new Error(`Application with ID ${applicationId} not found`);
-    }
+      const updateableData = {
+        Id: parseInt(applicationId),
+        status_c: newStatus
+      };
 
-    // Update the application status and timestamp
-    applications[applicationIndex].status = newStatus;
-    applications[applicationIndex].updatedAt = new Date().toISOString();
-    
-    return { ...applications[applicationIndex] };
+      const params = {
+        records: [updateableData]
+      };
+
+      const response = await apperClient.updateRecord(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successfulUpdates = response.results.filter(result => result.success);
+        const failedUpdates = response.results.filter(result => !result.success);
+        
+        if (failedUpdates.length > 0) {
+          console.error(`Failed to update application status ${failedUpdates.length} records:${JSON.stringify(failedUpdates)}`);
+          throw new Error(failedUpdates[0].message || "Failed to update application status");
+        }
+        
+        return successfulUpdates[0].data;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error updating application status:", error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error("Error updating application status:", error.message);
+        throw new Error(error.message);
+      }
+    }
   },
 
   async update(id, applicationData) {
-    await delay(400);
-    
-    if (typeof id !== 'number') {
-      throw new Error('Application ID must be a number');
+    try {
+      // Only include Updateable fields
+      const updateableData = {
+        Id: parseInt(id)
+      };
+
+      // Add only provided updateable fields
+      if (applicationData.name || applicationData.Name) updateableData.Name = applicationData.name || applicationData.Name;
+      if (applicationData.tags || applicationData.Tags) updateableData.Tags = applicationData.tags || applicationData.Tags;
+      if (applicationData.appliedAt || applicationData.appliedAt_c) updateableData.appliedAt_c = applicationData.appliedAt || applicationData.appliedAt_c;
+      if (applicationData.status || applicationData.status_c) updateableData.status_c = applicationData.status || applicationData.status_c;
+      if (applicationData.notes || applicationData.notes_c) updateableData.notes_c = applicationData.notes || applicationData.notes_c;
+      if (applicationData.interview || applicationData.interview_c) updateableData.interview_c = applicationData.interview || applicationData.interview_c;
+      if (applicationData.jobId || applicationData.jobId_c) updateableData.jobId_c = parseInt(applicationData.jobId || applicationData.jobId_c);
+      if (applicationData.candidateId || applicationData.candidateId_c) updateableData.candidateId_c = parseInt(applicationData.candidateId || applicationData.candidateId_c);
+
+      const params = {
+        records: [updateableData]
+      };
+
+      const response = await apperClient.updateRecord(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successfulUpdates = response.results.filter(result => result.success);
+        const failedUpdates = response.results.filter(result => !result.success);
+        
+        if (failedUpdates.length > 0) {
+          console.error(`Failed to update applications ${failedUpdates.length} records:${JSON.stringify(failedUpdates)}`);
+          throw new Error(failedUpdates[0].message || "Failed to update application");
+        }
+        
+        return successfulUpdates[0].data;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error updating application:", error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error("Error updating application:", error.message);
+        throw new Error(error.message);
+      }
     }
-
-    const index = applications.findIndex(app => app.Id === id);
-    if (index === -1) {
-      throw new Error('Application not found');
-    }
-
-    const updatedApplication = {
-      ...applications[index],
-      ...applicationData,
-      Id: applications[index].Id // Preserve original ID
-    };
-
-    applications[index] = updatedApplication;
-    return { ...updatedApplication };
   },
 
   async delete(id) {
-    await delay(300);
-    
-    if (typeof id !== 'number') {
-      throw new Error('Application ID must be a number');
-    }
+    try {
+      const params = {
+        RecordIds: [parseInt(id)]
+      };
 
-    const index = applications.findIndex(app => app.Id === id);
-    if (index === -1) {
-      throw new Error('Application not found');
-    }
+      const response = await apperClient.deleteRecord(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
 
-    const deletedApplication = { ...applications[index] };
-    applications.splice(index, 1);
-    return deletedApplication;
+      if (response.results) {
+        const successfulDeletions = response.results.filter(result => result.success);
+        const failedDeletions = response.results.filter(result => !result.success);
+        
+        if (failedDeletions.length > 0) {
+          console.error(`Failed to delete applications ${failedDeletions.length} records:${JSON.stringify(failedDeletions)}`);
+          throw new Error(failedDeletions[0].message || "Failed to delete application");
+        }
+        
+        return true;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error deleting application:", error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error("Error deleting application:", error.message);
+        throw new Error(error.message);
+      }
+    }
   },
 
-async checkApplication(jobId, candidateId) {
-    await delay(100);
-    
-    return applications.find(
-      app => app.jobId === jobId && app.candidateId === candidateId
-    ) || null;
+  async checkApplication(jobId, candidateId) {
+    try {
+      const params = {
+        fields: [{ field: { Name: "Id" } }],
+        where: [
+          {
+            FieldName: "jobId_c",
+            Operator: "EqualTo", 
+            Values: [parseInt(jobId)]
+          },
+          {
+            FieldName: "candidateId_c",
+            Operator: "EqualTo",
+            Values: [parseInt(candidateId)]
+          }
+        ]
+      };
+
+      const response = await apperClient.fetchRecords(tableName, params);
+      
+      if (!response.success) {
+        return null;
+      }
+
+      return response.data && response.data.length > 0 ? response.data[0] : null;
+    } catch (error) {
+      console.error("Error checking application:", error);
+      return null;
+    }
   },
 
-  // Schedule interview for an application
   async scheduleInterview(applicationId, interviewData) {
-    await delay(400);
-    
-    if (typeof applicationId !== 'number') {
-      throw new Error('Application ID must be a number');
+    try {
+      const { date, time, interviewer, type, notes } = interviewData;
+      if (!date || !time || !interviewer || !type) {
+        throw new Error('Date, time, interviewer, and type are required');
+      }
+
+      const validTypes = ['Phone', 'Video', 'In-person'];
+      if (!validTypes.includes(type)) {
+        throw new Error('Invalid interview type');
+      }
+
+      const interviewDetails = JSON.stringify({
+        date,
+        time,
+        interviewer,
+        type,
+        notes: notes || ''
+      });
+
+      const updateableData = {
+        Id: parseInt(applicationId),
+        interview_c: interviewDetails,
+        status_c: 'interview_scheduled'
+      };
+
+      const params = {
+        records: [updateableData]
+      };
+
+      const response = await apperClient.updateRecord(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successfulUpdates = response.results.filter(result => result.success);
+        const failedUpdates = response.results.filter(result => !result.success);
+        
+        if (failedUpdates.length > 0) {
+          console.error(`Failed to schedule interview ${failedUpdates.length} records:${JSON.stringify(failedUpdates)}`);
+          throw new Error(failedUpdates[0].message || "Failed to schedule interview");
+        }
+        
+        return successfulUpdates[0].data;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error scheduling interview:", error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error("Error scheduling interview:", error.message);
+        throw new Error(error.message);
+      }
     }
-
-    const applicationIndex = applications.findIndex(app => app.Id === applicationId);
-    if (applicationIndex === -1) {
-      throw new Error('Application not found');
-    }
-
-    // Validate interview data
-    const { date, time, interviewer, type, notes } = interviewData;
-    if (!date || !time || !interviewer || !type) {
-      throw new Error('Date, time, interviewer, and type are required');
-    }
-
-    const validTypes = ['Phone', 'Video', 'In-person'];
-    if (!validTypes.includes(type)) {
-      throw new Error('Invalid interview type');
-    }
-
-    applications[applicationIndex].interview = {
-      date,
-      time,
-      interviewer,
-      type,
-      notes: notes || ''
-    };
-
-    // Ensure status is interview_scheduled
-    applications[applicationIndex].status = 'interview_scheduled';
-
-    return { ...applications[applicationIndex] };
   },
 
-  // Update interview details
   async updateInterview(applicationId, interviewData) {
-    await delay(400);
-    
-    if (typeof applicationId !== 'number') {
-      throw new Error('Application ID must be a number');
+    try {
+      // Get existing application first
+      const existingApp = await this.getById(applicationId);
+      if (!existingApp || !existingApp.interview_c) {
+        throw new Error('No interview scheduled for this application');
+      }
+
+      let existingInterview = {};
+      try {
+        existingInterview = JSON.parse(existingApp.interview_c);
+      } catch (e) {
+        existingInterview = {};
+      }
+
+      const updatedInterview = {
+        ...existingInterview,
+        ...interviewData
+      };
+
+      const updateableData = {
+        Id: parseInt(applicationId),
+        interview_c: JSON.stringify(updatedInterview)
+      };
+
+      const params = {
+        records: [updateableData]
+      };
+
+      const response = await apperClient.updateRecord(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        throw new Error(response.message);
+      }
+
+      if (response.results) {
+        const successfulUpdates = response.results.filter(result => result.success);
+        const failedUpdates = response.results.filter(result => !result.success);
+        
+        if (failedUpdates.length > 0) {
+          console.error(`Failed to update interview ${failedUpdates.length} records:${JSON.stringify(failedUpdates)}`);
+          throw new Error(failedUpdates[0].message || "Failed to update interview");
+        }
+        
+        return successfulUpdates[0].data;
+      }
+    } catch (error) {
+      if (error?.response?.data?.message) {
+        console.error("Error updating interview:", error?.response?.data?.message);
+        throw new Error(error?.response?.data?.message);
+      } else {
+        console.error("Error updating interview:", error.message);
+        throw new Error(error.message);
+      }
     }
-
-    const applicationIndex = applications.findIndex(app => app.Id === applicationId);
-    if (applicationIndex === -1) {
-      throw new Error('Application not found');
-    }
-
-    if (!applications[applicationIndex].interview) {
-      throw new Error('No interview scheduled for this application');
-    }
-
-    applications[applicationIndex].interview = {
-      ...applications[applicationIndex].interview,
-      ...interviewData
-    };
-
-    return { ...applications[applicationIndex] };
   },
 
-  // Get upcoming interviews
   async getUpcomingInterviews() {
-    await delay(200);
-    
-    const now = new Date();
-    const upcomingInterviews = applications
-      .filter(app => app.interview && app.status === 'interview_scheduled')
-      .map(app => ({
-        ...app,
-        interviewDateTime: new Date(`${app.interview.date}T${app.interview.time}`)
-      }))
-      .filter(app => app.interviewDateTime >= now)
-      .sort((a, b) => a.interviewDateTime - b.interviewDateTime);
+    try {
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "interview_c" } },
+          { field: { Name: "status_c" } },
+          { field: { Name: "jobId_c" } },
+          { field: { Name: "candidateId_c" } }
+        ],
+        where: [
+          {
+            FieldName: "status_c",
+            Operator: "EqualTo",
+            Values: ["interview_scheduled"]
+          }
+        ]
+      };
 
-    return upcomingInterviews.map(app => {
-      const { interviewDateTime, ...rest } = app;
-      return rest;
-    });
+      const response = await apperClient.fetchRecords(tableName, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return [];
+      }
+
+      const now = new Date();
+      const upcomingInterviews = (response.data || [])
+        .map(app => {
+          try {
+            const interview = JSON.parse(app.interview_c || '{}');
+            return {
+              ...app,
+              interview,
+              interviewDateTime: new Date(`${interview.date}T${interview.time}`)
+            };
+          } catch (e) {
+            return null;
+          }
+        })
+        .filter(app => app && app.interviewDateTime >= now)
+        .sort((a, b) => a.interviewDateTime - b.interviewDateTime);
+
+      return upcomingInterviews.map(app => {
+        const { interviewDateTime, ...rest } = app;
+        return rest;
+      });
+    } catch (error) {
+      console.error("Error fetching upcoming interviews:", error);
+      return [];
+    }
   }
 };

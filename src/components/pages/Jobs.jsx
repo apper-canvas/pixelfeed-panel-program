@@ -82,10 +82,11 @@ async function loadJobs() {
 async function handleSaveJob(jobData) {
     try {
       // Find client company name from clientId
-      const client = clients.find(c => c.Id === parseInt(jobData.clientId))
+      const client = clients.find(c => c.Id === parseInt(jobData.clientId || jobData.clientId_c))
       const jobWithClient = {
         ...jobData,
-        company: client ? client.companyName : jobData.company
+        company: client ? (client.companyName_c || client.companyName) : (jobData.company_c || jobData.company),
+        company_c: client ? (client.companyName_c || client.companyName) : (jobData.company_c || jobData.company)
       }
       
       if (editingJob) {
@@ -120,20 +121,25 @@ async function handleSaveJob(jobData) {
 }
   }
 
-  const getAppliedCandidatesForJob = (jobId) => {
-    const jobApplications = applications.filter(app => app.jobId === jobId)
+const getAppliedCandidatesForJob = (jobId) => {
+    const jobApplications = applications.filter(app => (app.jobId_c || app.jobId) === jobId)
     return jobApplications.map(app => 
-      candidates.find(candidate => candidate.Id === app.candidateId)
+      candidates.find(candidate => candidate.Id === (app.candidateId_c || app.candidateId))
     ).filter(Boolean)
   }
 
 const filteredJobs = jobs.filter(job => {
     const searchLower = searchTerm.toLowerCase()
-    const client = clients.find(c => c.companyName === job.company)
-    return job.title.toLowerCase().includes(searchLower) ||
-           job.company.toLowerCase().includes(searchLower) ||
-           job.description.toLowerCase().includes(searchLower) ||
-           (client?.contactPerson?.toLowerCase().includes(searchLower))
+    const jobTitle = job.title_c || job.title || job.Name || ''
+    const jobCompany = job.company_c || job.company || ''
+    const jobDescription = job.description_c || job.description || ''
+    const client = clients.find(c => (c.companyName_c || c.companyName) === jobCompany)
+    const clientContact = client?.contactPerson_c || client?.contactPerson || ''
+    
+    return jobTitle.toLowerCase().includes(searchLower) ||
+           jobCompany.toLowerCase().includes(searchLower) ||
+           jobDescription.toLowerCase().includes(searchLower) ||
+           clientContact.toLowerCase().includes(searchLower)
   })
   return (
     <div className="space-y-6">

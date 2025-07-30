@@ -24,7 +24,7 @@ const [candidates, setCandidates] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [selectedCandidate, setSelectedCandidate] = useState(null)
-const [modalMode, setModalMode] = useState('add')
+  const [modalMode, setModalMode] = useState('add')
 
   const statusOptions = [
     { value: 'all', label: 'All Candidates' },
@@ -141,20 +141,24 @@ function handleViewCandidate(candidate) {
   }
 
 const getCandidateApplications = (candidateId) => {
-    const candidateApplications = applications.filter(app => app.candidateId === candidateId)
+    const candidateApplications = applications.filter(app => 
+      (app.candidateId_c || app.candidateId) === candidateId
+    )
     return candidateApplications.map(app => {
-      const job = jobs.find(job => job.Id === app.jobId)
+      const job = jobs.find(job => job.Id === (app.jobId_c || app.jobId))
       return {
         ...app,
-        jobTitle: job?.title || 'Unknown Position'
+        jobTitle: job?.title_c || job?.title || job?.Name || 'Unknown Position'
       }
     })
   }
 
-  const getAppliedJobsForCandidate = (candidateId) => {
-    const candidateApplications = applications.filter(app => app.candidateId === candidateId)
+const getAppliedJobsForCandidate = (candidateId) => {
+    const candidateApplications = applications.filter(app => 
+      (app.candidateId_c || app.candidateId) === candidateId
+    )
     return candidateApplications.map(app => 
-      jobs.find(job => job.Id === app.jobId)
+      jobs.find(job => job.Id === (app.jobId_c || app.jobId))
     ).filter(Boolean)
   }
 
@@ -180,10 +184,15 @@ function getStatusCounts() {
   const statusCounts = getStatusCounts()
   
 const filteredCandidates = candidates.filter(candidate => {
+    const candidateName = candidate.Name || candidate.name || '';
+    const candidatePosition = candidate.position_c || candidate.position || '';
+    const candidateSkills = candidate.skills_c || candidate.skills || [];
+    const skillsArray = Array.isArray(candidateSkills) ? candidateSkills : (candidateSkills || '').split(',');
+    
     const matchesSearch = !searchTerm || 
-      candidate.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      candidate.position?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      candidate.skills?.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
+      candidateName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      candidatePosition.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      skillsArray.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const candidateStatus = getCandidateStatus(candidate.Id);
     const matchesStatus = statusFilter === 'all' || candidateStatus === statusFilter;

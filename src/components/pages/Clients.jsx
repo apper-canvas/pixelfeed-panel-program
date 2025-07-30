@@ -82,13 +82,18 @@ function Clients() {
     }
   }
 
-  const filteredClients = clients.filter(client => {
+const filteredClients = clients.filter(client => {
     const searchLower = searchTerm.toLowerCase()
-    const matchesSearch = client.companyName.toLowerCase().includes(searchLower) ||
-                         client.contactPerson.toLowerCase().includes(searchLower) ||
-                         client.email.toLowerCase().includes(searchLower)
+    const companyName = client.companyName_c || client.companyName || client.Name || ''
+    const contactPerson = client.contactPerson_c || client.contactPerson || ''
+    const email = client.email_c || client.email || ''
+    const relationshipStatus = client.relationshipStatus_c || client.relationshipStatus || ''
     
-    const matchesStatus = statusFilter === 'all' || client.relationshipStatus === statusFilter
+    const matchesSearch = companyName.toLowerCase().includes(searchLower) ||
+                         contactPerson.toLowerCase().includes(searchLower) ||
+                         email.toLowerCase().includes(searchLower)
+    
+    const matchesStatus = statusFilter === 'all' || relationshipStatus === statusFilter
     
     return matchesSearch && matchesStatus
   })
@@ -174,9 +179,9 @@ function Clients() {
                 <ApperIcon name="CheckCircle" size={20} className="text-green-600" />
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-600">Active</p>
+<p className="text-sm font-medium text-gray-600">Active</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {clients.filter(c => c.relationshipStatus === 'active').length}
+                  {clients.filter(c => (c.relationshipStatus_c || c.relationshipStatus) === 'active').length}
                 </p>
               </div>
             </div>
@@ -190,9 +195,9 @@ function Clients() {
                 <ApperIcon name="Clock" size={20} className="text-yellow-600" />
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-600">Prospects</p>
+<p className="text-sm font-medium text-gray-600">Prospects</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {clients.filter(c => c.relationshipStatus === 'prospect').length}
+                  {clients.filter(c => (c.relationshipStatus_c || c.relationshipStatus) === 'prospect').length}
                 </p>
               </div>
             </div>
@@ -206,9 +211,9 @@ function Clients() {
                 <ApperIcon name="XCircle" size={20} className="text-gray-600" />
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-600">Inactive</p>
+<p className="text-sm font-medium text-gray-600">Inactive</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {clients.filter(c => c.relationshipStatus === 'inactive').length}
+                  {clients.filter(c => (c.relationshipStatus_c || c.relationshipStatus) === 'inactive').length}
                 </p>
               </div>
             </div>
@@ -237,16 +242,16 @@ function Clients() {
             <Card key={client.Id} className="hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
+<div className="flex-1">
                     <h3 className="text-lg font-semibold font-display text-gray-900 mb-1">
-                      {client.companyName}
+                      {client.companyName_c || client.companyName || client.Name}
                     </h3>
                     <div className="flex items-center text-sm text-gray-600 mb-2">
                       <ApperIcon name="User" size={14} className="mr-1" />
-                      {client.contactPerson}
+                      {client.contactPerson_c || client.contactPerson}
                     </div>
-                    <Badge variant={getStatusVariant(client.relationshipStatus)}>
-                      {client.relationshipStatus}
+                    <Badge variant={getStatusVariant(client.relationshipStatus_c || client.relationshipStatus)}>
+                      {client.relationshipStatus_c || client.relationshipStatus}
                     </Badge>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -266,17 +271,17 @@ function Clients() {
                 </div>
                 
                 <div className="space-y-2 text-sm text-gray-600">
-                  <div className="flex items-center">
+<div className="flex items-center">
                     <ApperIcon name="Mail" size={14} className="mr-2 text-gray-400" />
-                    <span className="truncate">{client.email}</span>
+                    <span className="truncate">{client.email_c || client.email}</span>
                   </div>
                   <div className="flex items-center">
                     <ApperIcon name="Phone" size={14} className="mr-2 text-gray-400" />
-                    <span>{client.phone}</span>
+                    <span>{client.phone_c || client.phone}</span>
                   </div>
                   <div className="flex items-start">
                     <ApperIcon name="MapPin" size={14} className="mr-2 mt-0.5 text-gray-400 flex-shrink-0" />
-                    <span className="line-clamp-2">{client.address}</span>
+                    <span className="line-clamp-2">{client.address_c || client.address}</span>
                   </div>
                 </div>
               </CardContent>
