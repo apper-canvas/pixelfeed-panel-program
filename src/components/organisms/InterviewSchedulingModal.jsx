@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
-import Textarea from "@/components/atoms/Textarea";
+import Textarea from "@/components/atoms/TextArea";
 import FormField from "@/components/molecules/FormField";
 import ApperIcon from "@/components/ApperIcon";
 import { toast } from "react-toastify";
