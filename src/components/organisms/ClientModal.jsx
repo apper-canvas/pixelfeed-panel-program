@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import Textarea from "@/components/atoms/Textarea";
-import FormField from "@/components/molecules/FormField";
-import ApperIcon from "@/components/ApperIcon";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import FormField from "@/components/molecules/FormField";
+import Input from "@/components/atoms/Input";
+import TextArea from "@/components/atoms/TextArea";
+import Button from "@/components/atoms/Button";
 
 const ClientModal = ({ isOpen, onClose, onSave, client = null }) => {
   const [formData, setFormData] = useState({
@@ -189,9 +189,9 @@ const ClientModal = ({ isOpen, onClose, onSave, client = null }) => {
                 <FormField
                   label="Address"
                   required
-                  error={errors.address}
+error={errors.address}
                 >
-                  <Textarea
+                  <TextArea
                     placeholder="123 Business Street, City, State ZIP"
                     value={formData.address}
                     onChange={(e) => handleInputChange("address", e.target.value)}
@@ -199,7 +199,6 @@ const ClientModal = ({ isOpen, onClose, onSave, client = null }) => {
                     rows={3}
                   />
                 </FormField>
-
                 <FormField
                   label="Relationship Status"
                 >
