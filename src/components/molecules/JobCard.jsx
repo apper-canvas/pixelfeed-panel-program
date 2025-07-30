@@ -7,7 +7,12 @@ import { format } from "date-fns";
 import { cn } from "@/utils/cn";
 
 const JobCard = ({ job, className, onEdit, onDelete, onApplyCandidate, appliedCandidates = [] }) => {
-  const getStatusVariant = (status) => {
+const getStatusVariant = (status) => {
+    // Handle undefined, null, or empty status
+    if (!status || typeof status !== 'string') {
+      return "default";
+    }
+    
     switch (status.toLowerCase()) {
       case "active":
         return "active";
@@ -40,9 +45,9 @@ const JobCard = ({ job, className, onEdit, onDelete, onApplyCandidate, appliedCa
                 </>
               )}
             </div>
-            <div className="flex items-center gap-2 mb-3">
+<div className="flex items-center gap-2 mb-3">
               <Badge variant={getStatusVariant(job.status)}>
-                {job.status}
+                {job.status || 'Unknown'}
               </Badge>
               {job.jobType && (
                 <Badge variant="secondary">
