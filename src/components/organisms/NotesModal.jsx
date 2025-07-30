@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
 import FormField from "@/components/molecules/FormField";
-import Textarea from "@/components/atoms/Textarea";
+import Textarea from "@/components/atoms/TextArea";
 import Button from "@/components/atoms/Button";
 
 const NOTE_CATEGORIES = [
