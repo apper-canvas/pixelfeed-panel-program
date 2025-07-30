@@ -7,9 +7,9 @@ import ApplicationStatusPipeline from "@/components/molecules/ApplicationStatusP
 import NotesList from "@/components/molecules/NotesList";
 import FormField from "@/components/molecules/FormField";
 import InterviewSchedulingModal from "@/components/organisms/InterviewSchedulingModal";
-import Textarea from "@/components/atoms/Textarea";
 import Badge from "@/components/atoms/Badge";
 import Input from "@/components/atoms/Input";
+import TextArea from "@/components/atoms/TextArea";
 import Button from "@/components/atoms/Button";
 const CandidateProfileModal = ({ 
   isOpen, 
@@ -392,9 +392,9 @@ return (
                 
                 {/* Resume Summary */}
                 <div>
-                  <h3 className="text-lg font-semibold font-display text-gray-900 mb-4">Professional Summary</h3>
+<h3 className="text-lg font-semibold font-display text-gray-900 mb-4">Professional Summary</h3>
                   <FormField label="Resume Summary" required error={errors.resumeSummary}>
-                    <Textarea
+                    <TextArea
                       value={formData.resumeSummary}
                       onChange={e => handleInputChange("resumeSummary", e.target.value)}
                       placeholder="Brief summary of professional background, key achievements, and career objectives..."
