@@ -140,10 +140,20 @@ const getStatusVariant = (status) => {
           </div>
         )}
         
-        <div className="flex items-center justify-between text-xs text-gray-500">
+<div className="flex items-center justify-between text-xs text-gray-500">
           <div className="flex items-center">
             <ApperIcon name="Calendar" size={14} className="mr-1" />
-            Posted {format(new Date(job.createdAt), "MMM d, yyyy")}
+            Posted {(() => {
+              const dateValue = job.createdAt_c || job.createdAt;
+              if (!dateValue) return "N/A";
+              try {
+                const date = new Date(dateValue);
+                if (isNaN(date.getTime())) return "N/A";
+                return format(date, "MMM d, yyyy");
+              } catch (error) {
+                return "N/A";
+              }
+            })()}
           </div>
           <div className="flex items-center">
             <ApperIcon name="Users" size={14} className="mr-1" />
