@@ -28,29 +28,29 @@ const CandidateCard = ({ candidate, className, onView, appliedJobs = [], ...prop
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center shadow-lg">
               <span className="text-white font-semibold text-lg">
-                {candidate.name.charAt(0).toUpperCase()}
+{candidate?.name?.charAt(0)?.toUpperCase() || '?'}
               </span>
             </div>
             <div>
               <h3 className="text-lg font-semibold font-display text-gray-900">
-                {candidate.name}
+                {candidate?.name || 'Unknown Candidate'}
               </h3>
-              <p className="text-sm text-gray-600">{candidate.position}</p>
+              <p className="text-sm text-gray-600">{candidate?.position || 'No Position'}</p>
             </div>
           </div>
-          <Badge variant={getStatusVariant(candidate.status)}>
-            {candidate.status}
+          <Badge variant={getStatusVariant(candidate?.status || 'unknown')}>
+            {candidate?.status || 'unknown'}
           </Badge>
         </div>
         
         <div className="space-y-2 mb-4">
           <div className="flex items-center text-sm text-gray-600">
             <ApperIcon name="Mail" size={16} className="mr-2 text-gray-400" />
-            {candidate.email}
+            {candidate?.email || 'No email'}
           </div>
           <div className="flex items-center text-sm text-gray-600">
             <ApperIcon name="Calendar" size={16} className="mr-2 text-gray-400" />
-            Applied {format(new Date(candidate.appliedAt), "MMM d, yyyy")}
+            Applied {candidate?.appliedAt ? format(new Date(candidate.appliedAt), "MMM d, yyyy") : 'N/A'}
           </div>
         </div>
         
@@ -73,7 +73,7 @@ const CandidateCard = ({ candidate, className, onView, appliedJobs = [], ...prop
         <div className="flex items-center justify-between">
           <div className="flex items-center text-xs text-gray-500">
             <ApperIcon name="Calendar" size={12} className="mr-1" />
-            Applied {format(new Date(candidate.appliedAt), "MMM d")}
+Applied {candidate?.appliedAt ? format(new Date(candidate.appliedAt), "MMM d") : 'N/A'}
           </div>
           
 <div className="flex items-center space-x-2">
